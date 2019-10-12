@@ -21,5 +21,9 @@ public class Room {
     private Long id;
 
     @ManyToMany
+    @JoinColumn(name = "caretaker_id")
     private Set<Caretaker> caretakers;
+
+//    @OneToMany(mappedBy = "room")
+//    private List<Animal> animals;
 }
