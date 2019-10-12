@@ -1,5 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
+import com.domy.zoomanagement.models.Animal;
 import com.domy.zoomanagement.models.Room;
 import com.domy.zoomanagement.repository.AnimalsRepository;
 import com.domy.zoomanagement.repository.RoomRepository;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class RoomController {
@@ -24,6 +26,13 @@ public class RoomController {
     public @ResponseBody
     List<Room> getRooms() {
         return roomRepository.findAll();
+    }
+
+    @GetMapping(value = "/rooms/{roomId}")
+    public @ResponseBody List<Animal> getAnimalsInRoom(@PathVariable Long roomId) {
+        return animalsRepository.findAll().stream()
+                .filter(animal -> animal.getRoom().getId().equals(roomId))
+                .collect(Collectors.toList());
     }
 
     @PostMapping(value = "/rooms", consumes = "application/json")

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -23,12 +23,11 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
-//    @ManyToMany
-//    @JoinColumn(name = "caretaker_id")
-//    private Set<Caretaker> caretakers;
+    @ManyToMany
+    @JoinColumn(name = "caretaker_id")
+    private Set<Caretaker> caretakers;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
-    private List<Animal> animals;
 }

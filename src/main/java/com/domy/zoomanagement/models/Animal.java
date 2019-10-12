@@ -19,9 +19,13 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "species", nullable = false)
     private String species;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "room_id")
     private Room room;
 }

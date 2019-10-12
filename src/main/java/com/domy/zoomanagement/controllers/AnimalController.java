@@ -26,17 +26,23 @@ public class AnimalController {
     }
 
     @PostMapping(value = "/animals", consumes = "application/json")
-    public Animal createAnimal(@RequestBody Animal animal) {
+    public Animal createAnimal(@Valid @RequestBody AnimalRequest request) {
+        Animal animal = Animal.builder()
+                .name(request.getName())
+                .species(request.getSpecies())
+                .room(roomRepository.findById(request.getRoom()).orElseThrow(() -> new ResourceNotFoundException(("Animal not found with given ID"))))
+                .build();
         return animalsRepository.save(animal);
     }
 
     @PutMapping("/animals/{animalId}")
     public Animal updateAnimal(@PathVariable Long animalId,
-                               @Valid @RequestBody Animal animalRequest) {
+                               @Valid @RequestBody AnimalRequest request) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
-                    animal.setRoom(roomRepository.findById((animalRequest.getRoom().getId())).orElseThrow());
-                    if (animalRequest.getSpecies() != null) animal.setSpecies(animalRequest.getSpecies());
+                    animal.setRoom(roomRepository.findById((request.getRoom())).orElseThrow(() -> new ResourceNotFoundException(("Cannot set room that doesn't exist!"))));
+                    animal.setName(request.getName());
+                    animal.setSpecies(request.getSpecies());
                     return animalsRepository.save(animal);
                 }).orElseThrow(() -> new ResourceNotFoundException(("Animal not found with given ID")));
     }
