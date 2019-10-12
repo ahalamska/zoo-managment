@@ -1,20 +1,17 @@
 package com.domy.zoomanagement.models;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Builder
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@CrossOrigin
 @Table(name = "animals")
 public class Animal {
 
@@ -24,7 +21,7 @@ public class Animal {
 
     private String species;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "room_id")
-//    private Room room;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room")
+    private Room room;
 }

@@ -10,5 +10,7 @@ import java.util.List;
 public interface AnimalsRepository extends JpaRepository<Animal, Long> {
     List<Animal> findAnimalsById(Long animalId);
 
+    Animal findAnimalBySpecies(String species);
+
     List<Animal> findAll();
 }

@@ -2,6 +2,7 @@ package com.domy.zoomanagement.controllers;
 
 import com.domy.zoomanagement.models.Animal;
 import com.domy.zoomanagement.repository.AnimalsRepository;
+import com.domy.zoomanagement.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,12 @@ public class AnimalController {
 
     @Autowired
     private AnimalsRepository animalsRepository;
+    @Autowired
+    RoomRepository roomRepository;
 
     @GetMapping(value = "/animals", produces = {"application/json"})
-    public @ResponseBody List<Animal> getAnimals() {
+    public @ResponseBody
+    List<Animal> getAnimals() {
         return animalsRepository.findAll();
     }
 
@@ -31,8 +35,8 @@ public class AnimalController {
                                @Valid @RequestBody Animal animalRequest) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
-//                    if(animalRequest.getRoom() != null) animal.setRoom(animalRequest.getRoom());
-                    if(animalRequest.getSpecies() != null) animal.setSpecies(animalRequest.getSpecies());
+                    animal.setRoom(roomRepository.findById((animalRequest.getRoom().getId())).orElseThrow());
+                    if (animalRequest.getSpecies() != null) animal.setSpecies(animalRequest.getSpecies());
                     return animalsRepository.save(animal);
                 }).orElseThrow(() -> new ResourceNotFoundException(("Animal not found with given ID")));
     }
