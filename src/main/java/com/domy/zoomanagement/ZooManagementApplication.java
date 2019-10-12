@@ -1,13 +1,13 @@
-package com.domy.zoomanagment;
+package com.domy.zoomanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ZooManagmentApplication {
+public class ZooManagementApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZooManagmentApplication.class, args);
+        SpringApplication.run(ZooManagementApplication.class, args);
     }
 
 }
