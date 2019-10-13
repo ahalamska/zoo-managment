@@ -1,7 +1,12 @@
 package com.domy.zoomanagement.models;
 
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -27,5 +32,7 @@ public class Animal {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
+    @JsonUnwrapped(prefix = "room_")
+    @JsonIgnoreProperties(value = {"caretakers", "name"})
     private Room room;
 }

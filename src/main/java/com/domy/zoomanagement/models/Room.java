@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.Set;
 
 
 @Data
@@ -25,9 +24,4 @@ public class Room {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @ManyToMany
-    @JoinColumn(name = "caretaker_id")
-    private Set<Caretaker> caretakers;
-
 }

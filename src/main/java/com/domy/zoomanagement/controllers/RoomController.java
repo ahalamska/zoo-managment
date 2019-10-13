@@ -45,7 +45,7 @@ public class RoomController {
                                @Valid @RequestBody Room request) {
         return roomRepository.findById(roomId)
                 .map(room -> {
-                    if(request.getName() != null) room.setName(request.getName());
+                    if (request.getName() != null) room.setName(request.getName());
                     return roomRepository.save(room);
                 }).orElseThrow(() -> new ResourceNotFoundException(("Room not found with given ID")));
     }

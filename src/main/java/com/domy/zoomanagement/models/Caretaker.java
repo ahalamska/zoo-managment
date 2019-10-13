@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Entity
@@ -20,8 +22,4 @@ public class Caretaker {
     private Long id;
 
     private String name;
-
-    @ManyToMany
-    @JoinColumn(name ="caretaker_rooms")
-    private Set<Room> rooms;
 }
