@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
+
 @Data
 @Entity
 @Builder
@@ -24,11 +25,13 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "species", nullable = false)
-    private String species;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "species_name")
+    private Species species;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")

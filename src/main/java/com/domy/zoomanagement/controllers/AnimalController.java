@@ -1,8 +1,11 @@
 package com.domy.zoomanagement.controllers;
 
 import com.domy.zoomanagement.models.Animal;
+import com.domy.zoomanagement.models.Species;
 import com.domy.zoomanagement.repository.AnimalsRepository;
 import com.domy.zoomanagement.repository.RoomRepository;
+import com.domy.zoomanagement.repository.SpeciesRepository;
+import com.domy.zoomanagement.requests.AnimalRequest;
 import com.domy.zoomanagement.utils.OptionalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -17,6 +20,10 @@ public class AnimalController {
 
     @Autowired
     private AnimalsRepository animalsRepository;
+
+    @Autowired
+    private SpeciesRepository speciesRepository;
+
     @Autowired
     RoomRepository roomRepository;
 
@@ -28,9 +35,12 @@ public class AnimalController {
 
     @PostMapping(value = "/animals", consumes = "application/json")
     public Animal createAnimal(@Valid @RequestBody AnimalRequest request) {
+        Species species =
+                speciesRepository.findByName(request.getSpecies()).orElseThrow(() -> new ResourceNotFoundException((
+                        "Species with given name wasn't found")));
         Animal animal = Animal.builder()
                 .name(OptionalUtil.handleNullable(request.getName()))
-                .species(OptionalUtil.handleNullable(request.getSpecies()))
+                .species(species)
                 .room(roomRepository.findById(request.getRoom()).orElseThrow(() -> new ResourceNotFoundException(("Room not found with given ID"))))
                 .build();
         return animalsRepository.save(animal);
@@ -38,14 +48,17 @@ public class AnimalController {
 
     @PutMapping("/animals/{animalId}")
     public Animal updateAnimal(@PathVariable Long animalId,
-                               @Valid @RequestBody AnimalRequest request) {
+            @Valid @RequestBody AnimalRequest request) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
                     animal.setRoom(roomRepository.findById((request.getRoom())).orElseThrow(() -> new ResourceNotFoundException(("Cannot set room that doesn't exist!"))));
                     if (request.getName() != null) animal.setName(request.getName());
-                    if (request.getSpecies() != null) animal.setSpecies(request.getSpecies());
+                    if (request.getSpecies() != null){
+                        animal.setSpecies(speciesRepository.findByName(request.getSpecies()).orElseThrow(() -> new ResourceNotFoundException((
+                                "Species with given name wasn't found"))));
+                    }
                     return animalsRepository.save(animal);
-                }).orElseThrow(() -> new ResourceNotFoundException(("Animal not found with given ID")));
+                }).orElseThrow(() -> new ResourceNotFoundException(("Animal with given ID not found")));
     }
 
     @DeleteMapping("/animals/{animalId}")
