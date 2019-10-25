@@ -18,14 +18,18 @@ import java.util.List;
 @RestController
 public class AnimalController {
 
-    @Autowired
-    private AnimalsRepository animalsRepository;
+    private final AnimalsRepository animalsRepository;
+
+    private final SpeciesRepository speciesRepository;
+
+    private final RoomRepository roomRepository;
 
     @Autowired
-    private SpeciesRepository speciesRepository;
-
-    @Autowired
-    RoomRepository roomRepository;
+    public AnimalController(AnimalsRepository animalsRepository, SpeciesRepository speciesRepository, RoomRepository roomRepository) {
+        this.animalsRepository = animalsRepository;
+        this.speciesRepository = speciesRepository;
+        this.roomRepository = roomRepository;
+    }
 
     @GetMapping(value = "/animals", produces = {"application/json"})
     public @ResponseBody

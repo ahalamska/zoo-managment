@@ -14,8 +14,10 @@ import java.util.List;
 @RestController
 public class SpeciesController {
 
+    private final SpeciesRepository speciesRepository;
+
     @Autowired
-    private SpeciesRepository speciesRepository;
+    public SpeciesController(SpeciesRepository speciesRepository) {this.speciesRepository = speciesRepository;}
 
     @GetMapping(value = "/species", produces = {"application/json"})
     public @ResponseBody
@@ -38,12 +40,20 @@ public class SpeciesController {
 
     @PutMapping("/species/{speciesName}")
     public Species updateSpecies(@PathVariable String speciesName,
-            @Valid @RequestBody SpeciesRequest request) {
+            @RequestBody SpeciesRequest request) {
         return speciesRepository.findByName(speciesName)
                 .map(species -> {
-                    if (request.getName() != null) species.setName(request.getName());
                     if (request.getDescription() != null){
                         species.setDescription(request.getDescription());
+                    }
+                    if (request.getFood() != null){
+                        species.setFood(request.getFood());
+                    }
+                    if (request.getNaturalHabitat() != null){
+                        species.setNaturalHabitat(request.getNaturalHabitat());
+                    }
+                    if (request.getPrice() != null){
+                        species.setPrice(request.getPrice());
                     }
                     return speciesRepository.save(species);
                 }).orElseThrow(() -> new ResourceNotFoundException(("Species with given name not found")));

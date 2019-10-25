@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Data
@@ -22,6 +24,28 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column
+    private int locatorsMaxNumber;
+
+    @OneToMany
+    @JoinColumn(name = "species_name")
+    private List<Species> species;
+
+    @Column(nullable = false)
+    private Float surface;
+
+    /*@Column(nullable = false)
+    private Localization localization;
+
+    @Column(nullable = false)
+    private Enclosure enclosure;
+
+    @Column(nullable = false)
+    private Caretaker caretaker;*/
+
+    @Column(nullable = false)
+    private Float price;
+
+
+
 }

@@ -2,21 +2,22 @@ package com.domy.zoomanagement.requests;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 public class SpeciesRequest {
-    @NonNull
+    @NotNull
     private String name;
 
     private String naturalHabitat;
 
     private String description;
 
-    @NonNull
+    @NotNull
     private String food;
 
-    @NonNull
+    @NotNull
     private Float price;
 }
