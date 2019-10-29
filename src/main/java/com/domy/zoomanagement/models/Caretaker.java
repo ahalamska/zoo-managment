@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -21,11 +18,16 @@ public class Caretaker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
     private String name;
 
-    private String specialization;
-
+    @Column(nullable = false)
     private Integer roomMaxNumber;
 
-//    private Contract contract;
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
 }

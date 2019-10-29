@@ -24,6 +24,9 @@ public class Room {
     private Long id;
 
     @Column
+    private boolean bought = false;
+
+    @Column
     private int locatorsMaxNumber;
 
     @OneToMany
@@ -33,14 +36,16 @@ public class Room {
     @Column(nullable = false)
     private Float surface;
 
-    /*@Column(nullable = false)
-    private Localization localization;*/
+    @Column(nullable = false)
+    private String localization;
 
-    /*@Column(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "enclosure_id")
     private Enclosure enclosure;
 
-    @Column(nullable = false)
-    private Caretaker caretaker;*/
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "caretaker_id")
+    private Caretaker caretaker;
 
     @Column(nullable = false)
     private Float price;

@@ -1,6 +1,7 @@
 package com.domy.zoomanagement.controllers;
 
 import com.domy.zoomanagement.models.Animal;
+import com.domy.zoomanagement.models.Room;
 import com.domy.zoomanagement.models.Species;
 import com.domy.zoomanagement.repository.AnimalsRepository;
 import com.domy.zoomanagement.repository.RoomRepository;
@@ -31,26 +32,36 @@ public class AnimalController {
         this.roomRepository = roomRepository;
     }
 
+
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(value = "/animals", produces = {"application/json"})
     public @ResponseBody
     List<Animal> getAnimals() {
-
         return animalsRepository.findAll();
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/animals", consumes = "application/json")
     public Animal createAnimal(@Valid @RequestBody AnimalRequest request) {
         Species species =
-                speciesRepository.findByName(request.getSpecies()).orElseThrow(() -> new ResourceNotFoundException((
-                        "Species with given name wasn't found")));
+                speciesRepository.findByName(request.getSpecies())
+                        .orElseThrow(() -> new ResourceNotFoundException(("Species with given name wasn't found")));
+
+        Room room =
+                roomRepository.findById(request.getRoom())
+                        .orElseThrow(() -> new ResourceNotFoundException(("Room not found with given ID")));
+
         Animal animal = Animal.builder().name(OptionalUtil.handleNullable(request.getName()))
                 .species(species)
-                .room(roomRepository.findById(request.getRoom()).orElseThrow(() -> new ResourceNotFoundException(("Room not found with given ID"))))
+                .room(room)
                 .build();
+
         return animalsRepository.save(animal);
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/animals/{animalId}")
     public Animal updateAnimal(@PathVariable Long animalId,
             @Valid @RequestBody AnimalRequest request) {
@@ -66,6 +77,8 @@ public class AnimalController {
                 }).orElseThrow(() -> new ResourceNotFoundException(("Animal with given ID not found")));
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/animals/{animalId}")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long animalId) {
         return animalsRepository.findById(animalId)

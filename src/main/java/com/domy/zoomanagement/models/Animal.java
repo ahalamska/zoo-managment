@@ -1,7 +1,6 @@
 package com.domy.zoomanagement.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,8 +31,7 @@ public class Animal {
     private Species species;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "room_id")
-    @JsonIgnoreProperties(value = {"caretakers", "name"})
     private Room room;
 }

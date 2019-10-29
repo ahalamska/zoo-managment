@@ -15,27 +15,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "enclosure")
-public class Enclosure {
+public class Habitat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "habitat_id")
-    private Habitat habitat;
-
     @Column(nullable = false)
-    private String localization;
-
-    @Column(nullable = false)
-    private Float surface;
-
-    @Column(nullable = false)
-    private Float price;
+    private String name;
 
     @Column
-    private Boolean bought = false;
-
+    private String description;
 
 }
