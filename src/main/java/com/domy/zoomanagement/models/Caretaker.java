@@ -22,4 +22,10 @@ public class Caretaker {
     private Long id;
 
     private String name;
+
+    private String specialization;
+
+    private Integer roomMaxNumber;
+
+//    private Contract contract;
 }

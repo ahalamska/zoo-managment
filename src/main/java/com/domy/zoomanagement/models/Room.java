@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -35,9 +34,9 @@ public class Room {
     private Float surface;
 
     /*@Column(nullable = false)
-    private Localization localization;
+    private Localization localization;*/
 
-    @Column(nullable = false)
+    /*@Column(nullable = false)
     private Enclosure enclosure;
 
     @Column(nullable = false)

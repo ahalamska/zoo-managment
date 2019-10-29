@@ -31,9 +31,11 @@ public class AnimalController {
         this.roomRepository = roomRepository;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(value = "/animals", produces = {"application/json"})
     public @ResponseBody
     List<Animal> getAnimals() {
+
         return animalsRepository.findAll();
     }
 
@@ -42,8 +44,7 @@ public class AnimalController {
         Species species =
                 speciesRepository.findByName(request.getSpecies()).orElseThrow(() -> new ResourceNotFoundException((
                         "Species with given name wasn't found")));
-        Animal animal = Animal.builder()
-                .name(OptionalUtil.handleNullable(request.getName()))
+        Animal animal = Animal.builder().name(OptionalUtil.handleNullable(request.getName()))
                 .species(species)
                 .room(roomRepository.findById(request.getRoom()).orElseThrow(() -> new ResourceNotFoundException(("Room not found with given ID"))))
                 .build();
