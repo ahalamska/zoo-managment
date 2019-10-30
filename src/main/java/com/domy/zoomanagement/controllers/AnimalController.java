@@ -47,10 +47,12 @@ public class AnimalController {
         Species species =
                 speciesRepository.findByName(request.getSpecies())
                         .orElseThrow(() -> new ResourceNotFoundException(("Species with given name wasn't found")));
-
         Room room =
                 roomRepository.findById(request.getRoom())
                         .orElseThrow(() -> new ResourceNotFoundException(("Room with given ID wasn't found")));
+        if(room.getCaretaker() == null){
+            throw new IllegalStateException("Given room has no caretaker");
+        }
 
         Animal animal = Animal.builder().name(OptionalUtil.handleNullable(request.getName()))
                 .species(species)
