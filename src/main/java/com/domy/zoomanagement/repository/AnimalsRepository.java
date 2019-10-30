@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface AnimalsRepository extends JpaRepository<Animal, Long> {
     List<Animal> findAnimalsById(Long animalId);
 
-    Animal findAnimalBySpecies(String species);
-
     @Query(nativeQuery = true,
             value = "SELECT * FROM animals a WHERE a.room_id = ?1")
     Optional<List<Animal>> findAllByRoom(Long roomId);
