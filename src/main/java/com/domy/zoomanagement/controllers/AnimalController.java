@@ -50,7 +50,7 @@ public class AnimalController {
 
         Room room =
                 roomRepository.findById(request.getRoom())
-                        .orElseThrow(() -> new ResourceNotFoundException(("Room not found with given ID")));
+                        .orElseThrow(() -> new ResourceNotFoundException(("Room with given ID wasn't found")));
 
         Animal animal = Animal.builder().name(OptionalUtil.handleNullable(request.getName()))
                 .species(species)
@@ -62,16 +62,14 @@ public class AnimalController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PutMapping("/animals/{animalId}")
-    public Animal updateAnimal(@PathVariable Long animalId,
-            @Valid @RequestBody AnimalRequest request) {
+    @PatchMapping("/animals/{animalId}")
+    public Animal updateAnimal(@PathVariable Long animalId, @RequestBody AnimalRequest request) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
-                    animal.setRoom(roomRepository.findById((request.getRoom())).orElseThrow(() -> new ResourceNotFoundException(("Cannot set room that doesn't exist!"))));
                     if (request.getName() != null) animal.setName(request.getName());
-                    if (request.getSpecies() != null){
-                        animal.setSpecies(speciesRepository.findByName(request.getSpecies()).orElseThrow(() -> new ResourceNotFoundException((
-                                "Species with given name wasn't found"))));
+                    if (request.getRoom() != null){
+                        animal.setRoom(roomRepository.findById(request.getRoom()).orElseThrow(() -> new ResourceNotFoundException((
+                                "Cannot update animal : Room with given ID wasn't found"))));
                     }
                     return animalsRepository.save(animal);
                 }).orElseThrow(() -> new ResourceNotFoundException(("Animal with given ID not found")));

@@ -23,7 +23,7 @@ public class Budget {
     private Float availableFunds;
 
     @Column(nullable = false)
-    private Float EUFunds;
+    private Float euFunds;
 
     @Column(nullable = false)
     private Float stateBudgetFunds;

@@ -30,7 +30,7 @@ public class Room {
     private int locatorsMaxNumber;
 
     @OneToMany
-    @JoinColumn(name = "species_name")
+    @Column(nullable = false)
     private List<Species> species;
 
     @Column(nullable = false)

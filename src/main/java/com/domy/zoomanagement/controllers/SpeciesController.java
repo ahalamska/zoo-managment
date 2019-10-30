@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 public class SpeciesController {
 
-    private final SpeciesRepository speciesRepository;
+    private SpeciesRepository speciesRepository;
 
     @Autowired
     public SpeciesController(SpeciesRepository speciesRepository) {this.speciesRepository = speciesRepository;}
@@ -38,7 +38,7 @@ public class SpeciesController {
         return speciesRepository.save(species);
     }
 
-    @PutMapping("/species/{speciesName}")
+    @PatchMapping("/species/{speciesName}")
     public Species updateSpecies(@PathVariable String speciesName,
             @RequestBody SpeciesRequest request) {
         return speciesRepository.findByName(speciesName)

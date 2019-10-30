@@ -9,6 +9,5 @@ import java.util.Date;
 @Repository
 public interface BudgetsRepository extends JpaRepository<Budget, Date> {
 
-    Budget findCurrent();
 
 }

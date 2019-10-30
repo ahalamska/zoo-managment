@@ -13,4 +13,6 @@ public interface SpeciesRepository extends JpaRepository<Species, Long> {
     List<Species> findAll();
 
     Optional<Species> findByName(String name);
+
+    Optional<List<Species>> findAllByName(List<String> names);
 }
