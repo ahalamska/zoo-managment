@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 public class SpeciesController {
 
+    public static final String SPECIES_NOT_FOUND = "Species with given name wasn't found";
     private SpeciesRepository speciesRepository;
 
     @Autowired
@@ -31,6 +32,7 @@ public class SpeciesController {
                 Species.builder()
                         .name(request.getName())
                         .description(request.getDescription())
+                        .photoUrl(request.getPhotoUrl())
                         .food(request.getFood())
                         .naturalHabitat(request.getNaturalHabitat())
                         .price(request.getPrice())
@@ -46,6 +48,9 @@ public class SpeciesController {
                     if (request.getDescription() != null){
                         species.setDescription(request.getDescription());
                     }
+                    if (request.getPhotoUrl() != null){
+                        species.setPhotoUrl(request.getPhotoUrl());
+                    }
                     if (request.getFood() != null){
                         species.setFood(request.getFood());
                     }
@@ -56,16 +61,16 @@ public class SpeciesController {
                         species.setPrice(request.getPrice());
                     }
                     return speciesRepository.save(species);
-                }).orElseThrow(() -> new ResourceNotFoundException(("Species with given name not found")));
+                }).orElseThrow(() -> new ResourceNotFoundException(SPECIES_NOT_FOUND));
     }
 
     @DeleteMapping("/species/{speciesName}")
-    public ResponseEntity deleteAnimal(@PathVariable String speciesName) {
+    public ResponseEntity deleteSpecies(@PathVariable String speciesName) {
         return speciesRepository.findByName(speciesName)
                 .map(species -> {
                     speciesRepository.delete(species);
                     return ResponseEntity.ok().build();
-                }).orElseThrow(() -> new ResourceNotFoundException("Animal not found with given ID"));
+                }).orElseThrow(() -> new ResourceNotFoundException(SPECIES_NOT_FOUND));
     }
 
 

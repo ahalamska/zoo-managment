@@ -27,6 +27,9 @@ public class Species {
     @Column
     private String description;
 
+    @Column
+    private String photoUrl;
+
     @Column(nullable = false)
     private String food;
 

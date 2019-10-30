@@ -15,6 +15,8 @@ public class SpeciesRequest {
 
     private String description;
 
+    private String photoUrl;
+
     @NotNull
     private String food;
 
