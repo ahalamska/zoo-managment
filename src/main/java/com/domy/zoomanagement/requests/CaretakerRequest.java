@@ -1,12 +1,11 @@
 package com.domy.zoomanagement.requests;
 
-import com.domy.zoomanagement.models.Contract;
+import com.domy.zoomanagement.managers.CaretakersManager.CARETAKER_TYPE;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -22,8 +21,5 @@ public class CaretakerRequest {
     private String name;
 
     @NotNull
-    private Integer roomMaxNumber;
-
-    @NotNull
-    private Long contractId;
+    private CARETAKER_TYPE type;
 }
