@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/enclosures")
 public class EnclosureController {
 
-    private static final String ENCLOSURE_NOT_FOUND = "Enclosure with given ID wasn't found";
+    static final String ENCLOSURE_NOT_FOUND = "Enclosure with given ID wasn't found";
 
     private EnclosureRepository enclosureRepository;
 
@@ -52,11 +52,12 @@ public class EnclosureController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @DeleteMapping("/{enclosureId}")
-    public ResponseEntity<?> destroyEnclosure(@PathVariable Long enclosureId) {
+    @PatchMapping("/{enclosureId}/destroy")
+    public Enclosure destroyEnclosure(@PathVariable Long enclosureId) {
         return enclosureRepository.findById(enclosureId).map(enclosure -> {
-            enclosureRepository.delete(enclosure);
-            return ResponseEntity.ok().body("deleted enclosure: " + enclosureId.toString());
-        }).orElseThrow(() -> new ResourceNotFoundException(ENCLOSURE_NOT_FOUND));
+            if (!enclosure.isBought()) throw new IllegalStateException("Enclosure is not bought");
+            enclosure.setBought(false);
+            return enclosureRepository.save(enclosure);
+        }).orElseThrow(() -> new ResourceNotFoundException((ENCLOSURE_NOT_FOUND)));
     }
 }

@@ -65,9 +65,8 @@ public class AnimalController {
                 roomRepository.findById(request.getRoom())
                         .orElseThrow(() -> new ResourceNotFoundException((ROOM_NOT_FOUND)));
         //TODO count budget
-        if(room.getCaretaker() == null){
-            throw new IllegalStateException("Given room has no caretaker");
-        }
+        if(!room.isBought()) throw new IllegalStateException("Given room is not bought!");
+        if(room.getCaretaker() == null) throw new IllegalStateException("Given room has no caretaker!");
 
         Animal animal = Animal.builder().name(OptionalUtil.handleNullable(request.getName()))
                 .species(species)
