@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/entertainers")
 public class EntertainerController {
 
-    public static final String ENTERTAINER_NOT_FOUND = "Entertainer not found with given ID";
+    private static final String ENTERTAINER_NOT_FOUND = "Entertainer not found with given ID";
 
     private EntertainersRepository entertainersRepository;
 

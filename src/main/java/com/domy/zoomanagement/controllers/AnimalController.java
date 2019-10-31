@@ -23,7 +23,7 @@ import static com.domy.zoomanagement.controllers.SpeciesController.SPECIES_NOT_F
 @RequestMapping("/animals")
 public class AnimalController {
 
-    public static final String ANIMAL_NOT_FOUND = "Animal not found with given ID";
+    private static final String ANIMAL_NOT_FOUND = "Animal not found with given ID";
 
     private final AnimalsRepository animalsRepository;
 

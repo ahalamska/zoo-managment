@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.domy.zoomanagement.controllers.CaretakerController.CARETAKER_NOT_FOUND;
+
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
@@ -20,37 +22,45 @@ public class RoomController {
     RoomRepository roomRepository;
     SpeciesRepository speciesRepository;
     CaretakerRepository caretakerRepository;
-    EnclosuresRepository enclosuresRepository;
+    EnclosureRepository enclosureRepository;
 
     @Autowired
     public RoomController(AnimalsRepository animalsRepository, RoomRepository roomRepository,
             SpeciesRepository speciesRepository, CaretakerRepository caretakerRepository,
-            EnclosuresRepository enclosuresRepository) {
+            EnclosureRepository enclosureRepository) {
         this.animalsRepository = animalsRepository;
         this.roomRepository = roomRepository;
         this.speciesRepository = speciesRepository;
         this.caretakerRepository = caretakerRepository;
-        this.enclosuresRepository = enclosuresRepository;
+        this.enclosureRepository = enclosureRepository;
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(produces = {"application/json"})
     public @ResponseBody
     List<Room> getRooms() {
         return roomRepository.findAll();
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(value = "/{roomId}/animals")
     public @ResponseBody
     List<Animal> getAnimalsInRoom(@PathVariable Long roomId) {
         return animalsRepository.findAllByRoom(roomId).orElse(null);
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(value = "/{roomId}")
     public @ResponseBody
     Room getRoomInfo(@PathVariable Long roomId) {
         return roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(consumes = "application/json")
     public Room createRoom(@RequestBody @Valid RoomRequest request) {
         List<Species> species = speciesRepository.findAllByName(request.getSpeciesNames())
@@ -61,7 +71,7 @@ public class RoomController {
         Enclosure enclosure = null;
         Caretaker caretaker = null;
         if (request.getEnclosureId() != null) {
-            enclosure = enclosuresRepository.findById(request.getEnclosureId())
+            enclosure = enclosureRepository.findById(request.getEnclosureId())
                     .orElseThrow(() -> new ResourceNotFoundException("Enclosure not found with given ID"));
         }
         if (request.getCaretakerId() != null) {
@@ -82,16 +92,20 @@ public class RoomController {
         return roomRepository.save(room);
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @PatchMapping("{roomId}/caretaker")
     public Room updateCaretaker(@PathVariable Long roomId, @RequestBody Long caretakerId) {
         Caretaker caretaker = caretakerRepository.findById(caretakerId)
-                .orElseThrow(() -> new IllegalArgumentException(("Caretaker not found with given ID")));
+                .orElseThrow(() -> new IllegalArgumentException((CARETAKER_NOT_FOUND)));
         return roomRepository.findById(roomId).map(room -> {
             room.setCaretaker(caretaker);
             return roomRepository.save(room);
         }).orElseThrow(() -> new ResourceNotFoundException(ROOM_NOT_FOUND));
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @PatchMapping("{roomId}/buy")
     public Room buyRoom(@PathVariable Long roomId) {
         return roomRepository.findById(roomId).map(room -> {
@@ -102,6 +116,8 @@ public class RoomController {
         }).orElseThrow(() -> new ResourceNotFoundException((ROOM_NOT_FOUND)));
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{roomId}")
     public ResponseEntity<?> deleteRoom(@PathVariable Long roomId) {
         return roomRepository.findById(roomId).map(room -> {

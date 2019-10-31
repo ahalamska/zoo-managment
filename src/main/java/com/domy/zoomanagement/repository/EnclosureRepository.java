@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EnclosuresRepository extends JpaRepository<Enclosure, Long> {
+public interface EnclosureRepository extends JpaRepository<Enclosure, Long> {
 
     List<Enclosure> findAll();
 }

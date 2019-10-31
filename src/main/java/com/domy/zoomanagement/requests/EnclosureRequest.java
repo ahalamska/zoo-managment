@@ -1,22 +1,10 @@
-package com.domy.zoomanagement.models;
+package com.domy.zoomanagement.requests;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import com.domy.zoomanagement.models.Habitat;
 
 import javax.persistence.*;
 
-@Data
-@Entity
-@Builder
-@Accessors(chain = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "enclosure")
-public class Enclosure {
-
+public class EnclosureRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,7 +23,5 @@ public class Enclosure {
     private Float price;
 
     @Column
-    private boolean bought = false;
-
-
+    private Boolean bought = false;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/caretakers")
 public class CaretakerController {
 
-    public static final String CARETAKER_NOT_FOUND = "Caretaker not found with given ID";
+    static final String CARETAKER_NOT_FOUND = "Caretaker not found with given ID";
 
     private CaretakerRepository caretakersRepository;
 
@@ -66,6 +66,7 @@ public class CaretakerController {
 
         return caretakersRepository.save(caretaker);
     }
+
 
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{caretakerId}")
