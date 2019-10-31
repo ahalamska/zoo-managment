@@ -16,7 +16,7 @@ public class CaretakersManager {
 
     public Caretaker createCaretaker(String firstName, String name, CARETAKER_TYPE type){
         return Caretaker.builder()
-                .contract(contractManager.createContract(type))
+                .contract(contractManager.createCaretakerContract(type))
                 .name(name)
                 .firstName(firstName)
                 .roomMaxNumber(getRoomMaxNumber(type))

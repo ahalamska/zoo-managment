@@ -13,7 +13,7 @@ import static java.lang.Math.round;
 @Component
 public class ContractManager {
 
-    Contract createContract(CARETAKER_TYPE type){
+    Contract createCaretakerContract(CARETAKER_TYPE type){
         return Contract.builder()
                 .payment(getPayment(type))
                 .signingDate(new Date())
@@ -37,4 +37,10 @@ public class ContractManager {
     }
 
 
+    public Contract createEntertainerContract() {
+        return Contract.builder()
+                .payment(4000f)
+                .signingDate(new Date())
+                .build();
+    }
 }

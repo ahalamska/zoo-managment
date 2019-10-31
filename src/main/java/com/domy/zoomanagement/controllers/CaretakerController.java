@@ -18,6 +18,8 @@ import java.util.List;
 @RequestMapping("/caretakers")
 public class CaretakerController {
 
+    public static final String CARETAKER_NOT_FOUND = "Caretaker not found with given ID";
+
     private CaretakerRepository caretakersRepository;
 
     private ContractsRepository contractsRepository;
@@ -49,7 +51,7 @@ public class CaretakerController {
     public @ResponseBody
     Caretaker getCaretaker(@PathVariable Long caretakerId) {
         return caretakersRepository.findById(caretakerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Caretaker not found with given ID"));
+                .orElseThrow(() -> new ResourceNotFoundException(CARETAKER_NOT_FOUND));
     }
 
 
@@ -75,6 +77,6 @@ public class CaretakerController {
             caretakersRepository.delete(caretaker);
             contractsRepository.delete(caretaker.getContract());
             return ResponseEntity.ok().body("Deleted caretaker and his contract");
-        }).orElseThrow(() -> new ResourceNotFoundException("Caretaker not found with given ID"));
+        }).orElseThrow(() -> new ResourceNotFoundException(CARETAKER_NOT_FOUND));
     }
 }

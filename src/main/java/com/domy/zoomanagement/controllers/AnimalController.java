@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.domy.zoomanagement.controllers.RoomController.ROOM_NOT_FOUND;
+import static com.domy.zoomanagement.controllers.SpeciesController.SPECIES_NOT_FOUND;
+
 @RestController
+@RequestMapping("/animals")
 public class AnimalController {
+
+    public static final String ANIMAL_NOT_FOUND = "Animal not found with given ID";
 
     private final AnimalsRepository animalsRepository;
 
@@ -34,22 +40,31 @@ public class AnimalController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping(value = "/animals", produces = {"application/json"})
+    @GetMapping(produces = {"application/json"})
     public @ResponseBody
     List<Animal> getAnimals() {
         return animalsRepository.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(value = "/{id}", produces = {"application/json"})
+    public @ResponseBody
+    Animal getAnimals(@PathVariable Long id) {
+        return animalsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ANIMAL_NOT_FOUND));
+    }
+
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping(value = "/animals", consumes = "application/json")
-    public Animal createAnimal(@Valid @RequestBody AnimalRequest request) {
+    @PostMapping(consumes = "application/json")
+    public Animal buyAnimal(@Valid @RequestBody AnimalRequest request) {
         Species species =
                 speciesRepository.findByName(request.getSpecies())
-                        .orElseThrow(() -> new ResourceNotFoundException(("Species with given name wasn't found")));
+                        .orElseThrow(() -> new ResourceNotFoundException((SPECIES_NOT_FOUND)));
         Room room =
                 roomRepository.findById(request.getRoom())
-                        .orElseThrow(() -> new ResourceNotFoundException(("Room with given ID wasn't found")));
+                        .orElseThrow(() -> new ResourceNotFoundException((ROOM_NOT_FOUND)));
+        //TODO count budget
         if(room.getCaretaker() == null){
             throw new IllegalStateException("Given room has no caretaker");
         }
@@ -64,28 +79,30 @@ public class AnimalController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PatchMapping("/animals/{animalId}")
+    @PatchMapping("/{animalId}")
     public Animal updateAnimal(@PathVariable Long animalId, @RequestBody AnimalRequest request) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
                     if (request.getName() != null) animal.setName(request.getName());
                     if (request.getRoom() != null){
-                        animal.setRoom(roomRepository.findById(request.getRoom()).orElseThrow(() -> new ResourceNotFoundException((
-                                "Cannot update animal : Room with given ID wasn't found"))));
+                        animal.setRoom(roomRepository.findById(request.getRoom())
+                                .orElseThrow(() -> new ResourceNotFoundException((
+                                "Cannot update animal : " + ROOM_NOT_FOUND))));
                     }
                     return animalsRepository.save(animal);
-                }).orElseThrow(() -> new ResourceNotFoundException(("Animal with given ID not found")));
+                }).orElseThrow(() -> new ResourceNotFoundException((ANIMAL_NOT_FOUND)));
     }
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @DeleteMapping("/animals/{animalId}")
-    public ResponseEntity<?> deleteAnimal(@PathVariable Long animalId) {
+    @DeleteMapping("/{animalId}")
+    public ResponseEntity<?> sellAnimal(@PathVariable Long animalId) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
                     animalsRepository.delete(animal);
+                    //TODO count budget
                     return ResponseEntity.ok().build();
-                }).orElseThrow(() -> new ResourceNotFoundException("Animal not found with given ID"));
+                }).orElseThrow(() -> new ResourceNotFoundException(ANIMAL_NOT_FOUND));
     }
 
 

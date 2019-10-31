@@ -43,7 +43,7 @@ public class Room {
     @JoinColumn(name = "enclosure_id")
     private Enclosure enclosure;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "caretaker_id")
     private Caretaker caretaker;
 

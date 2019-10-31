@@ -27,7 +27,7 @@ public class Caretaker {
     @Column(nullable = false)
     private Integer roomMaxNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contract_id")
     private Contract contract;
 }
