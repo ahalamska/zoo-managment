@@ -1,5 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
+import com.domy.zoomanagement.managers.BudgetManager;
 import com.domy.zoomanagement.models.Enclosure;
 import com.domy.zoomanagement.repository.EnclosureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,12 @@ public class EnclosureController {
 
     private EnclosureRepository enclosureRepository;
 
+    private BudgetManager budgetManager;
+
     @Autowired
-    public EnclosureController(EnclosureRepository enclosureRepository) {
+    public EnclosureController(EnclosureRepository enclosureRepository, BudgetManager budgetManager) {
         this.enclosureRepository = enclosureRepository;
+        this.budgetManager = budgetManager;
     }
 
 
@@ -44,8 +48,9 @@ public class EnclosureController {
         return enclosureRepository.findById(enclosureId).map(enclosure -> {
             if (enclosure.isBought()) throw new IllegalStateException("Enclosure already bought");
             enclosure.setBought(true);
-            //TODO count budget
-            return enclosureRepository.save(enclosure);
+            enclosureRepository.save(enclosure);
+            budgetManager.buy(enclosure.getPrice());
+            return enclosure;
         }).orElseThrow(() -> new ResourceNotFoundException((ENCLOSURE_NOT_FOUND)));
     }
 

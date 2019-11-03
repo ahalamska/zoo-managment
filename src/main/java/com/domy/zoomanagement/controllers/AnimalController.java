@@ -1,5 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
+import com.domy.zoomanagement.managers.BudgetManager;
 import com.domy.zoomanagement.models.Animal;
 import com.domy.zoomanagement.models.Room;
 import com.domy.zoomanagement.models.Species;
@@ -31,11 +32,14 @@ public class AnimalController {
 
     private final RoomRepository roomRepository;
 
+    private BudgetManager budgetManager;
+
     @Autowired
-    public AnimalController(AnimalsRepository animalsRepository, SpeciesRepository speciesRepository, RoomRepository roomRepository) {
+    public AnimalController(AnimalsRepository animalsRepository, SpeciesRepository speciesRepository, RoomRepository roomRepository, BudgetManager budgetManager) {
         this.animalsRepository = animalsRepository;
         this.speciesRepository = speciesRepository;
         this.roomRepository = roomRepository;
+        this.budgetManager = budgetManager;
     }
 
 
@@ -64,7 +68,6 @@ public class AnimalController {
         Room room =
                 roomRepository.findById(request.getRoom())
                         .orElseThrow(() -> new ResourceNotFoundException((ROOM_NOT_FOUND)));
-        //TODO count budget
         if(!room.isBought()) throw new IllegalStateException("Given room is not bought!");
         if(room.getCaretaker() == null) throw new IllegalStateException("Given room has no caretaker!");
 
@@ -73,7 +76,9 @@ public class AnimalController {
                 .room(room)
                 .build();
 
-        return animalsRepository.save(animal);
+        animalsRepository.save(animal);
+        budgetManager.buy(species.getPrice());
+        return animal;
     }
 
 
@@ -99,7 +104,7 @@ public class AnimalController {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
                     animalsRepository.delete(animal);
-                    //TODO count budget
+                    budgetManager.sell(animal.getSpecies().getPrice()/2);
                     return ResponseEntity.ok().build();
                 }).orElseThrow(() -> new ResourceNotFoundException(ANIMAL_NOT_FOUND));
     }

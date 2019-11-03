@@ -1,5 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
+import com.domy.zoomanagement.managers.BudgetManager;
 import com.domy.zoomanagement.models.Animal;
 import com.domy.zoomanagement.models.Caretaker;
 import com.domy.zoomanagement.models.Enclosure;
@@ -26,14 +27,15 @@ public class RoomController {
     private RoomRepository roomRepository;
     private CaretakerRepository caretakerRepository;
     private EnclosureRepository enclosureRepository;
+    private BudgetManager budgetManager;
 
     @Autowired
-    public RoomController(AnimalsRepository animalsRepository, RoomRepository roomRepository,
-            CaretakerRepository caretakerRepository, EnclosureRepository enclosureRepository) {
+    public RoomController(AnimalsRepository animalsRepository, RoomRepository roomRepository, CaretakerRepository caretakerRepository, EnclosureRepository enclosureRepository, BudgetManager budgetManager) {
         this.animalsRepository = animalsRepository;
         this.roomRepository = roomRepository;
         this.caretakerRepository = caretakerRepository;
         this.enclosureRepository = enclosureRepository;
+        this.budgetManager = budgetManager;
     }
 
 
@@ -97,8 +99,9 @@ public class RoomController {
             if (room.isBought()) throw new IllegalStateException("Room already bought");
             room.setBought(true);
             room.setLocalization(localization);
-            //TODO count budget
-            return roomRepository.save(room);
+            roomRepository.save(room);
+            budgetManager.buy(room.getPrice());
+            return room;
         }).orElseThrow(() -> new ResourceNotFoundException((ROOM_NOT_FOUND)));
     }
 
