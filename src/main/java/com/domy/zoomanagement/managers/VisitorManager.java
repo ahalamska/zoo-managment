@@ -54,5 +54,10 @@ public class VisitorManager {
     public void deleteOldStoredVisitors() {
         visitorsRepository.deleteAll();
     }
+
+    public void cleanVisitorsRepository() {
+        visitorsRepository.deleteAll();
+        this.visitors.clear();
+    }
 }
 

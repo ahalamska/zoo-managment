@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
-import com.domy.zoomanagement.managers.CaretakersManager;
+import com.domy.zoomanagement.managers.EmployeesManager;
 import com.domy.zoomanagement.models.Caretaker;
 import com.domy.zoomanagement.repository.CaretakerRepository;
 import com.domy.zoomanagement.repository.ContractsRepository;
@@ -26,11 +26,11 @@ public class CaretakerController {
 
     private RoomRepository roomRepository;
 
-    private CaretakersManager caretakerManager;
+    private EmployeesManager caretakerManager;
 
     @Autowired
     public CaretakerController(CaretakerRepository caretakersRepository, ContractsRepository contractsRepository,
-            RoomRepository roomRepository, CaretakersManager caretakerManager) {
+            RoomRepository roomRepository, EmployeesManager caretakerManager) {
         this.caretakersRepository = caretakersRepository;
         this.contractsRepository = contractsRepository;
         this.roomRepository = roomRepository;
@@ -59,12 +59,8 @@ public class CaretakerController {
     @PostMapping(consumes = "application/json")
     public Caretaker createCaretaker(@RequestBody @Valid CaretakerRequest request) {
 
-        Caretaker caretaker = caretakerManager.createCaretaker(request.getFirstName(), request.getName(),
+        return caretakerManager.createCaretaker(request.getFirstName(), request.getName(),
                 request.getType());
-
-        contractsRepository.save(caretaker.getContract());
-
-        return caretakersRepository.save(caretaker);
     }
 
 

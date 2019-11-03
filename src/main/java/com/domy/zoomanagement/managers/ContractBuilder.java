@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.managers;
 
-import com.domy.zoomanagement.managers.CaretakersManager.CARETAKER_TYPE;
+import com.domy.zoomanagement.managers.EmployeesManager.CARETAKER_TYPE;
 import com.domy.zoomanagement.models.Contract;
 import org.springframework.stereotype.Component;
 

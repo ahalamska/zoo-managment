@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static java.lang.Math.round;
 import static java.util.Arrays.asList;
@@ -25,22 +26,37 @@ public class BudgetManager {
     private AnimalsRepository animalsRepository;
     private EntertainersRepository entertainersRepository;
     private EnclosureRepository enclosureRepository;
+    private RoomRepository roomRepository;
+    private EmployeesManager employeesManager;
 
     @Autowired
     public BudgetManager(VisitorManager visitorManager, BudgetsRepository budgetsRepository,
             ContractsRepository contractsRepository, AnimalsRepository animalsRepository,
-            EntertainersRepository entertainersRepository, EnclosureRepository enclosureRepository) {
+            EntertainersRepository entertainersRepository, EnclosureRepository enclosureRepository,
+            RoomRepository roomRepository, EmployeesManager employeesManager) {
         this.visitorManager = visitorManager;
         this.budgetsRepository = budgetsRepository;
         this.contractsRepository = contractsRepository;
         this.animalsRepository = animalsRepository;
         this.entertainersRepository = entertainersRepository;
         this.enclosureRepository = enclosureRepository;
-        this.budget = new Budget(LocalDate.now(), 0, 30f, BEGINNING_FUNDS, BEGINNING_EU_FUNDS, BEGINNING_STATE_FUNDS);
+        this.roomRepository = roomRepository;
+        this.employeesManager = employeesManager;
+        this.budget = budgetsRepository.findCurrent();
     }
 
+    public Budget startNewGame() {
+        animalsRepository.deleteAll();
+        roomRepository.resetRooms();
+        enclosureRepository.resetEnclosures();
+        employeesManager.fireEmployees();
+        visitorManager.cleanVisitorsRepository();
+        resetBudget();
+        return budget;
+    }
 
-    public void nextRound() {
+    public Budget nextRound() {
+        budget.setRoundDate(budget.getRoundDate().plusMonths(1));
         countHappinessRate();
         if (budget.getRoundDate().getMonth() == Month.DECEMBER) {
             makeAnnualStatement();
@@ -49,9 +65,10 @@ public class BudgetManager {
         payContractors();
         getMoneyFromFunds();
         budgetsRepository.save(budget);
+        return budget;
     }
 
-    public void buy(Float amount) throws IllegalStateException{
+    public void buy(Float amount) throws IllegalStateException {
         if ((this.budget.getAvailableFunds() - amount) < 0)
             throw new IllegalStateException("Cannot buy : not enough money");
         this.budget.subtractMoney(amount);
@@ -118,4 +135,13 @@ public class BudgetManager {
         budget.subtractMoney(contractorsPayments);
     }
 
+    private void resetBudget() {
+        this.budget = new Budget(LocalDate.now(), 0, 30f,
+                BEGINNING_FUNDS, BEGINNING_EU_FUNDS, BEGINNING_STATE_FUNDS);
+        budgetsRepository.save(budget);
+    }
+
+    public List<Budget> getStatistics() {
+        return budgetsRepository.findAll();
+    }
 }

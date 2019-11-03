@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.requests;
 
-import com.domy.zoomanagement.managers.CaretakersManager.CARETAKER_TYPE;
+import com.domy.zoomanagement.managers.EmployeesManager.CARETAKER_TYPE;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

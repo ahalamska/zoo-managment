@@ -1,6 +1,7 @@
 package com.domy.zoomanagement.controllers;
 
 import com.domy.zoomanagement.managers.ContractBuilder;
+import com.domy.zoomanagement.managers.EmployeesManager;
 import com.domy.zoomanagement.models.Entertainer;
 import com.domy.zoomanagement.repository.ContractsRepository;
 import com.domy.zoomanagement.repository.EntertainersRepository;
@@ -20,6 +21,8 @@ public class EntertainerController {
     private static final String ENTERTAINER_NOT_FOUND = "Entertainer not found with given ID";
 
     private EntertainersRepository entertainersRepository;
+
+    private EmployeesManager employeesManager;
 
     private ContractsRepository contractsRepository;
 
@@ -54,15 +57,7 @@ public class EntertainerController {
     @PostMapping(consumes = "application/json")
     public Entertainer createEntertainer(@RequestBody @Valid EntertainerRequest request) {
 
-        Entertainer entertainer = Entertainer.builder()
-                .firstName(request.getFirstName())
-                .name(request.getName())
-                .contract(contractBuilder.createEntertainerContract())
-                .build();
-
-        contractsRepository.save(entertainer.getContract());
-
-        return entertainersRepository.save(entertainer);
+        return employeesManager.createEntertainer(request.getFirstName(), request.getName());
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
