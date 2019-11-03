@@ -21,6 +21,9 @@ public class Species {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false)
+    private Integer prestigePoints;
+
     @Column
     private String naturalHabitat;
 

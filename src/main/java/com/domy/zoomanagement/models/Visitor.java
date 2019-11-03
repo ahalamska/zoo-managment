@@ -1,6 +1,7 @@
 package com.domy.zoomanagement.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Visitor {
@@ -17,5 +19,5 @@ public class Visitor {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer age;
+    private String visitorType;
 }

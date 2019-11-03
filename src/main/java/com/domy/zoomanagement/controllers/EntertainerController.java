@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
-import com.domy.zoomanagement.managers.ContractManager;
+import com.domy.zoomanagement.managers.ContractBuilder;
 import com.domy.zoomanagement.models.Entertainer;
 import com.domy.zoomanagement.repository.ContractsRepository;
 import com.domy.zoomanagement.repository.EntertainersRepository;
@@ -23,13 +23,13 @@ public class EntertainerController {
 
     private ContractsRepository contractsRepository;
 
-    private ContractManager contractManager;
+    private ContractBuilder contractBuilder;
 
     @Autowired
-    public EntertainerController(EntertainersRepository entertainersRepository, ContractsRepository contractsRepository, ContractManager contractManager) {
+    public EntertainerController(EntertainersRepository entertainersRepository, ContractsRepository contractsRepository, ContractBuilder contractBuilder) {
         this.entertainersRepository = entertainersRepository;
         this.contractsRepository = contractsRepository;
-        this.contractManager = contractManager;
+        this.contractBuilder = contractBuilder;
     }
 
 
@@ -57,7 +57,7 @@ public class EntertainerController {
         Entertainer entertainer = Entertainer.builder()
                 .firstName(request.getFirstName())
                 .name(request.getName())
-                .contract(contractManager.createEntertainerContract())
+                .contract(contractBuilder.createEntertainerContract())
                 .build();
 
         contractsRepository.save(entertainer.getContract());

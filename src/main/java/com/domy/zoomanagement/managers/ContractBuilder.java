@@ -11,7 +11,7 @@ import java.util.Random;
 import static java.lang.Math.round;
 
 @Component
-public class ContractManager {
+public class ContractBuilder {
 
     Contract createCaretakerContract(CARETAKER_TYPE type){
         return Contract.builder()

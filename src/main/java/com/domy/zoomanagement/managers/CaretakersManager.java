@@ -7,16 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class CaretakersManager {
 
-    private ContractManager contractManager;
+    private ContractBuilder contractBuilder;
 
     @Autowired
-    public CaretakersManager(ContractManager contractManager) {
-        this.contractManager = contractManager;
+    public CaretakersManager(ContractBuilder contractBuilder) {
+        this.contractBuilder = contractBuilder;
     }
 
     public Caretaker createCaretaker(String firstName, String name, CARETAKER_TYPE type){
         return Caretaker.builder()
-                .contract(contractManager.createCaretakerContract(type))
+                .contract(contractBuilder.createCaretakerContract(type))
                 .name(name)
                 .firstName(firstName)
                 .roomMaxNumber(getRoomMaxNumber(type))

@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "enclosure")
 public class Habitat {
 
     @Id

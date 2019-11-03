@@ -18,5 +18,9 @@ public interface AnimalsRepository extends JpaRepository<Animal, Long> {
             value = "SELECT * FROM animals a WHERE a.room_id = ?1")
     Optional<List<Animal>> findAllByRoom(Long roomId);
 
+    @Query(nativeQuery = true,
+    value = "select SUM(species.prestige_points) FROM animals LEFT JOIN species ON animals.species_name = species.name")
+    Integer getSumOfPrestigePoints();
+
     List<Animal> findAll();
 }

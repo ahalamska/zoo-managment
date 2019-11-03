@@ -4,7 +4,6 @@ import com.domy.zoomanagement.models.Enclosure;
 import com.domy.zoomanagement.repository.EnclosureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
