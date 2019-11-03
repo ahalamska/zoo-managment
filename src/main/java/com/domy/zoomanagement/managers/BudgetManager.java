@@ -27,14 +27,16 @@ public class BudgetManager {
     private EnclosureRepository enclosureRepository;
 
     @Autowired
-    public BudgetManager(VisitorManager visitorManager, BudgetsRepository budgetsRepository, ContractsRepository contractsRepository, AnimalsRepository animalsRepository, EntertainersRepository entertainersRepository, EnclosureRepository enclosureRepository) {
+    public BudgetManager(VisitorManager visitorManager, BudgetsRepository budgetsRepository,
+            ContractsRepository contractsRepository, AnimalsRepository animalsRepository,
+            EntertainersRepository entertainersRepository, EnclosureRepository enclosureRepository) {
         this.visitorManager = visitorManager;
         this.budgetsRepository = budgetsRepository;
         this.contractsRepository = contractsRepository;
         this.animalsRepository = animalsRepository;
         this.entertainersRepository = entertainersRepository;
         this.enclosureRepository = enclosureRepository;
-        this.budget = new Budget(LocalDate.now(), 0, 30f,  BEGINNING_FUNDS, BEGINNING_EU_FUNDS, BEGINNING_STATE_FUNDS);
+        this.budget = new Budget(LocalDate.now(), 0, 30f, BEGINNING_FUNDS, BEGINNING_EU_FUNDS, BEGINNING_STATE_FUNDS);
     }
 
 
@@ -49,11 +51,13 @@ public class BudgetManager {
         budgetsRepository.save(budget);
     }
 
-    public void buy(Float amount){
+    public void buy(Float amount) throws IllegalStateException{
+        if ((this.budget.getAvailableFunds() - amount) < 0)
+            throw new IllegalStateException("Cannot buy : not enough money");
         this.budget.subtractMoney(amount);
     }
 
-    public void sell(Float amount){
+    public void sell(Float amount) {
         this.budget.addMoney(amount);
     }
 
@@ -61,15 +65,15 @@ public class BudgetManager {
         Integer animalPoints = animalsRepository.getSumOfPrestigePoints();
         Float ticketPriceRate = countTicketPriceRate(budget.getTicketPrice());
         long entertainersPoints = entertainersRepository.count() * 5;
-        long enclosurePoints = enclosureRepository.count()*5;
+        long enclosurePoints = enclosureRepository.count() * 5;
         budget.setHappinessRate(round((animalPoints + entertainersPoints + enclosurePoints) * ticketPriceRate));
     }
 
     private Float countTicketPriceRate(Float ticketPrice) {
-        if(ticketPrice <= 15) return 1f;
-        if(ticketPrice > 100) return  0.1f;
+        if (ticketPrice <= 15) return 1f;
+        if (ticketPrice > 100) return 0.1f;
 
-        return 1 - ticketPrice/120;
+        return 1 - ticketPrice / 120;
     }
 
     private void getMoneyFromFunds() {
@@ -94,20 +98,18 @@ public class BudgetManager {
         int monthValue = budget.getRoundDate().getMonthValue();
         if (asList(11, 12, 1, 2).contains(monthValue)) seasonRate = 0.5f;
         if (asList(7, 8).contains(monthValue)) seasonRate = 3f;
-        return round((new SecureRandom()).nextInt(100)
-                * seasonRate
-                * budget.getHappinessRate());
+        return round((new SecureRandom()).nextInt(100) * seasonRate * budget.getHappinessRate());
     }
 
 
     private Float negotiateFundsFromEU() {
-        if((new SecureRandom()).nextBoolean()) {
+        if ((new SecureRandom()).nextBoolean()) {
             return (float) (budget.getHappinessRate() * 500);
         }
         return 0f;
     }
 
-        private Float negotiateFundsFromStateBudget() {
+    private Float negotiateFundsFromStateBudget() {
         return (float) (budget.getHappinessRate() * 500);
     }
 
