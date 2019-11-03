@@ -39,7 +39,7 @@ public class Room {
     @Column(nullable = false)
     private String localization;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "enclosure_id")
     private Enclosure enclosure;
 

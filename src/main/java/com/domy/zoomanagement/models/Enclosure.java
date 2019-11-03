@@ -21,8 +21,8 @@ public class Enclosure {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "habitat_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "habitat_name")
     private Habitat habitat;
 
     @Column(nullable = false)
