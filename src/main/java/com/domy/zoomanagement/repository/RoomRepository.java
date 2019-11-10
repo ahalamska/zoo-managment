@@ -3,11 +3,17 @@ package com.domy.zoomanagement.repository;
 import com.domy.zoomanagement.models.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
+    @Override
+    @Query(nativeQuery = true,
+    value = "SELECT * FROM room")
+    List<Room> findAll();
 
     @Query(nativeQuery = true,
             value = "SELECT * FROM room r  LEFT JOIN animals a ON r.id = a.room_id WHERE r.caretaker_id = ?1")

@@ -62,7 +62,7 @@ public class EntertainerController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{entertainerId}")
-    public ResponseEntity<?> deleteEntertainer(@PathVariable Long entertainerId) {
+    public ResponseEntity deleteEntertainer(@PathVariable Long entertainerId) {
         return entertainersRepository.findById(entertainerId).map(entertainer -> {
             entertainersRepository.delete(entertainer);
             contractsRepository.delete(entertainer.getContract());

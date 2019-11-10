@@ -66,7 +66,7 @@ public class CaretakerController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{caretakerId}")
-    public ResponseEntity<?> deleteCaretaker(@PathVariable Long caretakerId) {
+    public ResponseEntity deleteCaretaker(@PathVariable Long caretakerId) {
         roomRepository.findAllNotEmptyByCaretaker(caretakerId).ifPresent(list -> {
             throw new IllegalStateException("Cannot delete caretaker: there are rooms that need him!");
         });

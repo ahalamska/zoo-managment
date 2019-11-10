@@ -100,7 +100,7 @@ public class AnimalController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{animalId}")
-    public ResponseEntity<?> sellAnimal(@PathVariable Long animalId) {
+    public ResponseEntity sellAnimal(@PathVariable Long animalId) {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
                     animalsRepository.delete(animal);
