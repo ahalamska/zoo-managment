@@ -10,16 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    @Override
-    @Query(nativeQuery = true,
-    value = "SELECT * FROM room")
-    List<Room> findAll();
 
-    @Query(nativeQuery = true,
-            value = "SELECT * FROM room r  LEFT JOIN animals a ON r.id = a.room_id WHERE r.caretaker_id = ?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM room r  LEFT JOIN animals a ON r.id = a.room_id" +
+            " WHERE r.caretaker_id = ?1")
     Optional<List<Room>> findAllNotEmptyByCaretaker(Long caretakerId);
 
-    @Query(nativeQuery = true,
-    value = "UPDATE room SET bought = false WHERE bought = true")
+    @Query(nativeQuery = true, value = "UPDATE room SET bought = false WHERE bought = true")
     void resetRooms();
 }

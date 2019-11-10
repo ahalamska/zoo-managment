@@ -1,19 +1,18 @@
 package com.domy.zoomanagement.controllers;
 
 import com.domy.zoomanagement.managers.BudgetManager;
-import com.domy.zoomanagement.models.Animal;
-import com.domy.zoomanagement.models.Caretaker;
-import com.domy.zoomanagement.models.Enclosure;
-import com.domy.zoomanagement.models.Room;
+import com.domy.zoomanagement.models.*;
 import com.domy.zoomanagement.repository.AnimalsRepository;
 import com.domy.zoomanagement.repository.CaretakerRepository;
 import com.domy.zoomanagement.repository.EnclosureRepository;
 import com.domy.zoomanagement.repository.RoomRepository;
+import com.domy.zoomanagement.requests.RoomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.domy.zoomanagement.controllers.CaretakerController.CARETAKER_NOT_FOUND;
 import static com.domy.zoomanagement.controllers.EnclosureController.ENCLOSURE_NOT_FOUND;
@@ -42,8 +41,19 @@ public class RoomController {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(produces = {"application/json"})
     public @ResponseBody
-    List<Room> getRooms() {
-        return roomRepository.findAll();
+    List<RoomResponse> getRooms() {
+        List<Room> rooms = roomRepository.findAll();
+        return rooms.stream().map(room -> RoomResponse.builder()
+                .id(room.getId())
+                .bought(room.isBought())
+                .localization(room.getLocalization())
+                .locatorsMaxNumber(room.getLocatorsMaxNumber())
+                .caretakerId(room.getCaretaker().getId())
+                .enclosureId(room.getEnclosure().getId())
+                .species(room.getSpecies().stream().map(Species::getName).collect(Collectors.toList()))
+                .surface(room.getSurface())
+                .price(room.getPrice())
+                .build()).collect(Collectors.toList());
     }
 
 
