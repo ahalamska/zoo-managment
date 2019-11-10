@@ -53,7 +53,7 @@ public class AnimalController {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public @ResponseBody
-    Animal getAnimals(@PathVariable Long id) {
+    Animal getAnimal(@PathVariable Long id) {
         return animalsRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ANIMAL_NOT_FOUND));
     }

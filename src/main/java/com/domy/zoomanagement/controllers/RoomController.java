@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.domy.zoomanagement.controllers.CaretakerController.CARETAKER_NOT_FOUND;
 import static com.domy.zoomanagement.controllers.EnclosureController.ENCLOSURE_NOT_FOUND;
+import static com.google.common.primitives.Longs.asList;
 
 @RestController
 @RequestMapping("/rooms")
@@ -62,6 +63,19 @@ public class RoomController {
     public @ResponseBody
     List<Animal> getAnimalsInRoom(@PathVariable Long roomId) {
         return animalsRepository.findAllByRoom(roomId).orElse(null);
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(value = "/available/{speciesName}")
+    public @ResponseBody
+    List<Long> getAvailableRoomsForSpecies(@PathVariable String speciesName) {
+        return roomRepository.findAvailableForSpecies(speciesName)
+                .map(rooms -> rooms.stream()
+                        .filter(room -> roomRepository.getNumberOfOccurrencesPlaces(room.getId()) < room.getLocatorsMaxNumber())
+                        .map(Room::getId)
+                        .collect(Collectors.toList()))
+                .orElse(asList());
     }
 
 

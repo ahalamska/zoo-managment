@@ -17,4 +17,15 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query(nativeQuery = true, value = "UPDATE room SET bought = false WHERE bought = true")
     void resetRooms();
+
+
+    @Query(nativeQuery = true,
+    value = "SELECT r.id, r.bought, r.localization, r.locators_max_number, r.price, r.surface, r.caretaker_id, r.enclosure_id " +
+            "FROM room r join room_species rs on r.id = rs.room_id " +
+            "WHERE rs.species_name = ?1 AND r.bought is true")
+    Optional<List<Room>> findAvailableForSpecies(String speciesName);
+
+    @Query(nativeQuery = true,
+            value = "SELECT count(*) as places FROM room r inner join animals a on a.room_id = r.id WHERE r.id = 7;")
+    Integer getNumberOfOccurrencesPlaces(Long roomId);
 }
