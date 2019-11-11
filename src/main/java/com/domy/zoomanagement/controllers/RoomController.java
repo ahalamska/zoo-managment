@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,12 @@ public class RoomController {
                 .bought(room.isBought())
                 .localization(room.getLocalization())
                 .locatorsMaxNumber(room.getLocatorsMaxNumber())
-                .caretakerId(room.getCaretaker().getId())
-                .enclosureId(room.getEnclosure().getId())
+                .caretakerId(room.getCaretaker() != null?
+                        room.getCaretaker().getId()
+                        :null)
+                .enclosureId(room.getEnclosure() != null?
+                        room.getEnclosure().getId()
+                        :null)
                 .species(room.getSpecies().stream().map(Species::getName).collect(Collectors.toList()))
                 .surface(room.getSurface())
                 .price(room.getPrice())
