@@ -47,7 +47,7 @@ class GameManagerUnitTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         sut = new GameManager(visitorManager, budgetsRepository, contractsRepository, animalsRepository,
-                entertainersRepository, enclosureRepository, roomRepository, employeesManager);
+                entertainersRepository, enclosureRepository, roomRepository, employeesManager, budget);
     }
 
     @Test
@@ -58,6 +58,7 @@ class GameManagerUnitTest {
 
         assertEquals(beginningBudget ,sut.startNewGame());
         verify(animalsRepository, times(1)).deleteAll();
+        verify(budgetsRepository, times(1)).deleteAll();
         verify(roomRepository, times(1)).resetRooms();
         verify(enclosureRepository, times(1)).resetEnclosures();
         verify(employeesManager, times(1)).fireEmployees();

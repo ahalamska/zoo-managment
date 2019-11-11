@@ -2,8 +2,10 @@ package com.domy.zoomanagement.repository;
 
 import com.domy.zoomanagement.models.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +17,9 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             " WHERE r.caretaker_id = ?1")
     Optional<List<Room>> findAllNotEmptyByCaretaker(Long caretakerId);
 
-    @Query(nativeQuery = true, value = "UPDATE room SET bought = false WHERE bought = true")
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "UPDATE room SET bought = false, caretaker_id = null, enclosure_id = null")
     void resetRooms();
 
 

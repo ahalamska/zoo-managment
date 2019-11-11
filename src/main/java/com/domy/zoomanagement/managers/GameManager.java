@@ -2,6 +2,7 @@ package com.domy.zoomanagement.managers;
 
 import com.domy.zoomanagement.models.Budget;
 import com.domy.zoomanagement.repository.*;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import static java.lang.Math.round;
 import static java.util.Arrays.asList;
 
 @Component
+@AllArgsConstructor
 public class GameManager {
 
     static final Float BEGINNING_FUNDS = 1000000F;
@@ -21,13 +23,13 @@ public class GameManager {
     static final Float BEGINNING_STATE_FUNDS = 50000F;
     private VisitorManager visitorManager;
     private BudgetsRepository budgetsRepository;
-    private Budget budget;
     private ContractsRepository contractsRepository;
     private AnimalsRepository animalsRepository;
     private EntertainersRepository entertainersRepository;
     private EnclosureRepository enclosureRepository;
     private RoomRepository roomRepository;
     private EmployeesManager employeesManager;
+    private Budget budget;
 
     @Autowired
     public GameManager(VisitorManager visitorManager, BudgetsRepository budgetsRepository,
@@ -42,7 +44,13 @@ public class GameManager {
         this.enclosureRepository = enclosureRepository;
         this.roomRepository = roomRepository;
         this.employeesManager = employeesManager;
-        this.budget = budgetsRepository.findCurrent();
+        Budget currentBudget = budgetsRepository.findCurrent();
+        if(currentBudget == null){
+            startNewGame();
+        }
+        else {
+            this.budget = currentBudget;
+        }
     }
 
     public Budget startNewGame() {
@@ -51,6 +59,7 @@ public class GameManager {
         enclosureRepository.resetEnclosures();
         employeesManager.fireEmployees();
         visitorManager.cleanVisitorsRepository();
+        budgetsRepository.deleteAll();
         resetBudget();
         return budget;
     }
@@ -136,7 +145,7 @@ public class GameManager {
     }
 
     private void resetBudget() {
-        this.budget = new Budget(LocalDate.now(), 0, 30f,
+        budget = new Budget(LocalDate.now(), 0, 30f,
                 BEGINNING_FUNDS, BEGINNING_EU_FUNDS, BEGINNING_STATE_FUNDS);
         budgetsRepository.save(budget);
     }
