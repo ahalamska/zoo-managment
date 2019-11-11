@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
-import com.domy.zoomanagement.managers.BudgetManager;
+import com.domy.zoomanagement.managers.GameManager;
 import com.domy.zoomanagement.models.Animal;
 import com.domy.zoomanagement.models.Caretaker;
 import com.domy.zoomanagement.models.Room;
@@ -33,7 +33,7 @@ class AnimalControllerUnitTest {
     private final SpeciesRepository speciesRepository = Mockito.mock(SpeciesRepository.class);
     private final RoomRepository roomRepository = Mockito.mock(RoomRepository.class);
     private AnimalController sut;
-    private BudgetManager budgetManager = Mockito.mock(BudgetManager.class);
+    private GameManager gameManager = Mockito.mock(GameManager.class);
     private AnimalRequest animalRequest;
     private Species species;
     private Room room;
@@ -42,7 +42,7 @@ class AnimalControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        sut = new AnimalController(animalsRepository, speciesRepository, roomRepository, budgetManager);
+        sut = new AnimalController(animalsRepository, speciesRepository, roomRepository, gameManager);
         animalRequest = AnimalRequest.builder()
                 .name("A")
                 .room(1L)
@@ -76,7 +76,7 @@ class AnimalControllerUnitTest {
         assertEquals(animal, sut.buyAnimal(animalRequest));
 
         verify(animalsRepository, times(1)).save(animal);
-        verify(budgetManager, times(1)).buy(species.getPrice());
+        verify(gameManager, times(1)).buy(species.getPrice());
     }
 
     @Test
@@ -156,7 +156,7 @@ class AnimalControllerUnitTest {
 
         verify(animalsRepository, times(1)).delete(animal);
 
-        verify(budgetManager, times(1)).sell(animal.getSpecies().getPrice() / 2);
+        verify(gameManager, times(1)).sell(animal.getSpecies().getPrice() / 2);
 
     }
 }
