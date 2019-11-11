@@ -26,6 +26,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<List<Room>> findAvailableForSpecies(String speciesName);
 
     @Query(nativeQuery = true,
-            value = "SELECT count(*) as places FROM room r inner join animals a on a.room_id = r.id WHERE r.id = 7;")
+            value = "SELECT count(*) as places FROM room r inner join animals a on a.room_id = r.id WHERE r.id = 7")
     Integer getNumberOfOccurrencesPlaces(Long roomId);
+
+    @Query(nativeQuery = true,
+            value = "SELECT * FROM room r WHERE r.bought = ?1 ")
+    List<Room> findAll(boolean bought);
 }

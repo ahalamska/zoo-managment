@@ -14,11 +14,11 @@ import static java.lang.Math.round;
 import static java.util.Arrays.asList;
 
 @Component
-public class BudgetManager {
+public class GameManager {
 
-    private static final Float BEGINNING_FUNDS = 1000000F;
-    private static final Float BEGINNING_EU_FUNDS = 100000F;
-    private static final Float BEGINNING_STATE_FUNDS = 50000F;
+    static final Float BEGINNING_FUNDS = 1000000F;
+    static final Float BEGINNING_EU_FUNDS = 100000F;
+    static final Float BEGINNING_STATE_FUNDS = 50000F;
     private VisitorManager visitorManager;
     private BudgetsRepository budgetsRepository;
     private Budget budget;
@@ -30,7 +30,7 @@ public class BudgetManager {
     private EmployeesManager employeesManager;
 
     @Autowired
-    public BudgetManager(VisitorManager visitorManager, BudgetsRepository budgetsRepository,
+    public GameManager(VisitorManager visitorManager, BudgetsRepository budgetsRepository,
             ContractsRepository contractsRepository, AnimalsRepository animalsRepository,
             EntertainersRepository entertainersRepository, EnclosureRepository enclosureRepository,
             RoomRepository roomRepository, EmployeesManager employeesManager) {

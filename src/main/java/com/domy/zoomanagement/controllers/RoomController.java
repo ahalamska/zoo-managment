@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
-import com.domy.zoomanagement.managers.BudgetManager;
+import com.domy.zoomanagement.managers.GameManager;
 import com.domy.zoomanagement.models.*;
 import com.domy.zoomanagement.repository.AnimalsRepository;
 import com.domy.zoomanagement.repository.CaretakerRepository;
@@ -27,23 +27,28 @@ public class RoomController {
     private RoomRepository roomRepository;
     private CaretakerRepository caretakerRepository;
     private EnclosureRepository enclosureRepository;
-    private BudgetManager budgetManager;
+    private GameManager gameManager;
 
     @Autowired
-    public RoomController(AnimalsRepository animalsRepository, RoomRepository roomRepository, CaretakerRepository caretakerRepository, EnclosureRepository enclosureRepository, BudgetManager budgetManager) {
+    public RoomController(AnimalsRepository animalsRepository, RoomRepository roomRepository, CaretakerRepository caretakerRepository, EnclosureRepository enclosureRepository, GameManager gameManager) {
         this.animalsRepository = animalsRepository;
         this.roomRepository = roomRepository;
         this.caretakerRepository = caretakerRepository;
         this.enclosureRepository = enclosureRepository;
-        this.budgetManager = budgetManager;
+        this.gameManager = gameManager;
     }
-
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(produces = {"application/json"})
     public @ResponseBody
-    List<RoomResponse> getRooms() {
-        List<Room> rooms = roomRepository.findAll();
+    List<RoomResponse> getRooms(@RequestParam(required = false) Boolean bought) {
+        List<Room> rooms = bought == null?
+                roomRepository.findAll():
+                roomRepository.findAll(bought);
+        return parseToRoomResponses(rooms);
+    }
+
+    private List<RoomResponse> parseToRoomResponses(List<Room> rooms){
         return rooms.stream().map(room -> RoomResponse.builder()
                 .id(room.getId())
                 .bought(room.isBought())
@@ -124,7 +129,7 @@ public class RoomController {
             room.setBought(true);
             room.setLocalization(localization);
             roomRepository.save(room);
-            budgetManager.buy(room.getPrice());
+            gameManager.buy(room.getPrice());
             return room;
         }).orElseThrow(() -> new ResourceNotFoundException((ROOM_NOT_FOUND)));
     }

@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
-import com.domy.zoomanagement.managers.BudgetManager;
+import com.domy.zoomanagement.managers.GameManager;
 import com.domy.zoomanagement.models.Animal;
 import com.domy.zoomanagement.models.Room;
 import com.domy.zoomanagement.models.Species;
@@ -32,15 +32,15 @@ public class AnimalController {
 
     private final RoomRepository roomRepository;
 
-    private BudgetManager budgetManager;
+    private GameManager gameManager;
 
     @Autowired
     public AnimalController(AnimalsRepository animalsRepository, SpeciesRepository speciesRepository,
-            RoomRepository roomRepository, BudgetManager budgetManager) {
+            RoomRepository roomRepository, GameManager gameManager) {
         this.animalsRepository = animalsRepository;
         this.speciesRepository = speciesRepository;
         this.roomRepository = roomRepository;
-        this.budgetManager = budgetManager;
+        this.gameManager = gameManager;
     }
 
 
@@ -80,7 +80,7 @@ public class AnimalController {
                 .build();
 
         animalsRepository.save(animal);
-        budgetManager.buy(species.getPrice());
+        gameManager.buy(species.getPrice());
         return animal;
     }
 
@@ -107,7 +107,7 @@ public class AnimalController {
         return animalsRepository.findById(animalId)
                 .map(animal -> {
                     animalsRepository.delete(animal);
-                    budgetManager.sell(animal.getSpecies().getPrice()/2);
+                    gameManager.sell(animal.getSpecies().getPrice()/2);
                     return ResponseEntity.ok().build();
                 }).orElseThrow(() -> new ResourceNotFoundException(ANIMAL_NOT_FOUND));
     }

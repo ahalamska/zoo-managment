@@ -1,6 +1,6 @@
 package com.domy.zoomanagement.controllers;
 
-import com.domy.zoomanagement.managers.BudgetManager;
+import com.domy.zoomanagement.managers.GameManager;
 import com.domy.zoomanagement.models.Budget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,29 +13,29 @@ import java.util.List;
 @RestController
 public class GameController {
 
-    private BudgetManager budgetManager;
+    private GameManager gameManager;
 
     @Autowired
-    public GameController(BudgetManager budgetManager) {
-        this.budgetManager = budgetManager;
+    public GameController(GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/next")
     public Budget startNewRound() {
-        return budgetManager.nextRound();
+        return gameManager.nextRound();
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/newGame")
     public Budget startNewGame() {
-        return budgetManager.startNewGame();
+        return gameManager.startNewGame();
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/budgets")
     public List<Budget> getBudgets(){
-        return budgetManager.getStatistics();
+        return gameManager.getStatistics();
     }
 }
