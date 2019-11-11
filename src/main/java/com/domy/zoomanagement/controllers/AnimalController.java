@@ -35,7 +35,8 @@ public class AnimalController {
     private BudgetManager budgetManager;
 
     @Autowired
-    public AnimalController(AnimalsRepository animalsRepository, SpeciesRepository speciesRepository, RoomRepository roomRepository, BudgetManager budgetManager) {
+    public AnimalController(AnimalsRepository animalsRepository, SpeciesRepository speciesRepository,
+            RoomRepository roomRepository, BudgetManager budgetManager) {
         this.animalsRepository = animalsRepository;
         this.speciesRepository = speciesRepository;
         this.roomRepository = roomRepository;
