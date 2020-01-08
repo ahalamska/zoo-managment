@@ -14,5 +14,5 @@ public interface ContractsRepository extends JpaRepository<Contract, Long> {
 
     @Query(nativeQuery = true,
     value = "SELECT SUM(payment) FROM contract")
-    float getContractorsPayment();
+    Float getContractorsPayment();
 }

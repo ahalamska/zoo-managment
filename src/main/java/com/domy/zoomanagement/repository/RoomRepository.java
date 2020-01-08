@@ -30,7 +30,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<List<Room>> findAvailableForSpecies(String speciesName);
 
     @Query(nativeQuery = true,
-            value = "SELECT count(*) as places FROM room r inner join animals a on a.room_id = r.id WHERE r.id = 7")
+            value = "SELECT count(*) as places FROM room r inner join animals a on a.room_id = r.id WHERE r.id = ?1")
     Integer getNumberOfOccurrencesPlaces(Long roomId);
 
     @Query(nativeQuery = true,

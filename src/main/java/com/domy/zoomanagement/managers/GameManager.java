@@ -77,7 +77,7 @@ public class GameManager {
         return budget;
     }
 
-    public void buy(Float amount) throws IllegalStateException {
+    public void buy(Float amount) {
         if ((this.budget.getAvailableFunds() - amount) < 0)
             throw new IllegalStateException("Cannot buy : not enough money");
         this.budget.subtractMoney(amount);
@@ -88,7 +88,7 @@ public class GameManager {
     }
 
     private void countHappinessRate() {
-        Integer animalPoints = animalsRepository.getSumOfPrestigePoints();
+        Integer animalPoints = animalsRepository.getSumOfPrestigePoints() != null ? animalsRepository.getSumOfPrestigePoints() : 0;
         Float ticketPriceRate = countTicketPriceRate(budget.getTicketPrice());
         long entertainersPoints = entertainersRepository.count() * 5;
         long enclosurePoints = enclosureRepository.count() * 5;
@@ -140,7 +140,8 @@ public class GameManager {
     }
 
     private void payContractors() {
-        float contractorsPayments = contractsRepository.getContractorsPayment();
+        Float contractorsPayments = contractsRepository.getContractorsPayment();
+        contractorsPayments = contractorsPayments != null ? contractorsPayments : 0;
         budget.subtractMoney(contractorsPayments);
     }
 

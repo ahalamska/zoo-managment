@@ -30,7 +30,7 @@ public class CaretakerController {
 
     @Autowired
     public CaretakerController(CaretakerRepository caretakersRepository, ContractsRepository contractsRepository,
-            RoomRepository roomRepository, EmployeesManager caretakerManager) {
+                               RoomRepository roomRepository, EmployeesManager caretakerManager) {
         this.caretakersRepository = caretakersRepository;
         this.contractsRepository = contractsRepository;
         this.roomRepository = roomRepository;
@@ -47,7 +47,7 @@ public class CaretakerController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping(value = "/{caretakerId}",produces = {"application/json"})
+    @GetMapping(value = "/{caretakerId}", produces = {"application/json"})
     public @ResponseBody
     Caretaker getCaretaker(@PathVariable Long caretakerId) {
         return caretakersRepository.findById(caretakerId)
@@ -59,7 +59,9 @@ public class CaretakerController {
     @PostMapping(consumes = "application/json")
     public Caretaker createCaretaker(@RequestBody @Valid CaretakerRequest request) {
 
-        return caretakerManager.createCaretaker(request.getFirstName(), request.getName(),
+        return caretakerManager.createCaretaker(
+                request.getFirstName(),
+                request.getName(),
                 request.getType());
     }
 

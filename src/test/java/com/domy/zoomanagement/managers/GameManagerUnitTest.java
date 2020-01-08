@@ -6,16 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDate;
 
-import static com.domy.zoomanagement.managers.GameManager.BEGINNING_EU_FUNDS;
-import static com.domy.zoomanagement.managers.GameManager.BEGINNING_FUNDS;
-import static com.domy.zoomanagement.managers.GameManager.BEGINNING_STATE_FUNDS;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.domy.zoomanagement.managers.GameManager.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -56,7 +53,7 @@ class GameManagerUnitTest {
         Budget beginningBudget = new Budget(LocalDate.now(), 0, 30f,
                 BEGINNING_FUNDS, BEGINNING_EU_FUNDS, BEGINNING_STATE_FUNDS);
 
-        assertEquals(beginningBudget ,sut.startNewGame());
+        assertEquals(beginningBudget, sut.startNewGame());
         verify(animalsRepository, times(1)).deleteAll();
         verify(budgetsRepository, times(1)).deleteAll();
         verify(roomRepository, times(1)).resetRooms();

@@ -29,8 +29,12 @@ public class EntertainerController {
     private ContractBuilder contractBuilder;
 
     @Autowired
-    public EntertainerController(EntertainersRepository entertainersRepository, ContractsRepository contractsRepository, ContractBuilder contractBuilder) {
+    public EntertainerController(EntertainersRepository entertainersRepository,
+                                 ContractsRepository contractsRepository,
+                                 ContractBuilder contractBuilder,
+                                 EmployeesManager employeesManager) {
         this.entertainersRepository = entertainersRepository;
+        this.employeesManager = employeesManager;
         this.contractsRepository = contractsRepository;
         this.contractBuilder = contractBuilder;
     }

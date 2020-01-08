@@ -78,9 +78,8 @@ public class AnimalController {
                 .species(species)
                 .room(room)
                 .build();
-
-        animalsRepository.save(animal);
         gameManager.buy(species.getPrice());
+        animalsRepository.save(animal);
         return animal;
     }
 
