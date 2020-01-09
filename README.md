@@ -1,4 +1,4 @@
-# zoo-managment
+# zoo-management
 
 To see API ducumentation:
 * run project 
